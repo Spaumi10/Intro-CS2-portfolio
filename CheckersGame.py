@@ -101,6 +101,13 @@ class Player:
         """Returns the number of opponent peces that the player has captured."""
 
 
+class Piece:
+    """Represents a checkers piece"""
+
+    def __init__(self):
+        pass
+
+
 game = Checkers()
 for row in game._board:
     print(row)
