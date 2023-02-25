@@ -36,6 +36,7 @@ class Checkers:
         Prints the current checker board, with placement of current pieces,
         None for empty spaces.
         """
+        print(self._board._board)
 
     def game_winner(self):
         """
@@ -77,13 +78,13 @@ class Board:
                 # Places white pieces on 1st and 3rd row from top.
                 if len(self._board) % 2 == 0 and len(self._board) < 3:
                     if len(temp_list) % 2 == 1:
-                        temp_list.append("White")
+                        temp_list.append(Piece("White"))
                     else:
                         temp_list.append(None)
                 # Places white pieces on 2nd row from top.
                 elif len(self._board) % 2 == 1 and len(self._board) < 3:
                     if len(temp_list) % 2 == 0:
-                        temp_list.append("White")
+                        temp_list.append(Piece("White"))
                     else:
                         temp_list.append(None)
 
@@ -91,13 +92,13 @@ class Board:
                 # Places black pieces on 6th and 8th row from top.
                 elif len(self._board) % 2 == 0 and len(self._board) > 4:
                     if len(temp_list) % 2 == 1:
-                        temp_list.append("Black")
+                        temp_list.append(Piece("Black"))
                     else:
                         temp_list.append(None)
                 # Places black pieces on 7th row from top.
                 elif len(self._board) % 2 == 1 and len(self._board) > 4:
                     if len(temp_list) % 2 == 0:
-                        temp_list.append("Black")
+                        temp_list.append(Piece("Black"))
                     else:
                         temp_list.append(None)
 
@@ -136,6 +137,12 @@ class Piece:
     def set_piece_type(self, piece_type):
         """Sets piece to piece_type."""
         self._piece_type = piece_type
+
+    def __str__(self) -> str:
+        return self._piece_color
+
+    def __repr__(self) -> str:
+        return self._piece_color
 
     # def get_kinged(self):
     #     """"""
