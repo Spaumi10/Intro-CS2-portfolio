@@ -101,20 +101,29 @@ class Player:
         """Returns the number of opponent peces that the player has captured."""
 
 
+class Board:
+    """ """
+
+
 class Piece:
     """Represents a checkers piece"""
 
-    def __init__(self, piece_color):
+    def __init__(self, piece_color, piece_type=""):
         self._piece_color = piece_color
+        self._piece_type = piece_type
 
     def move_piece(self):
         """"""
 
-    def get_kinged(self):
-        """"""
+    def set_piece_type(self, piece_type):
+        """Sets piece to piece_type."""
+        self._piece_type = piece_type
 
-    def get_triple_kinged(self):
-        """"""
+    # def get_kinged(self):
+    #     """"""
+
+    # def get_triple_kinged(self):
+    #     """"""
 
 
 game = Checkers()
