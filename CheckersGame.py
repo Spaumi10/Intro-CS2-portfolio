@@ -1,6 +1,6 @@
 # Author: Michael Spaulding
 # GitHub username: Spaumi10
-# Date: 02/24/2023
+# Date: 02/25/2023
 # Description:
 
 
@@ -104,8 +104,17 @@ class Player:
 class Piece:
     """Represents a checkers piece"""
 
-    def __init__(self):
-        pass
+    def __init__(self, piece_color):
+        self._piece_color = piece_color
+
+    def move_piece(self):
+        """"""
+
+    def get_kinged(self):
+        """"""
+
+    def get_triple_kinged(self):
+        """"""
 
 
 game = Checkers()
