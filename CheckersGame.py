@@ -3,6 +3,7 @@
 # Date: 02/25/2023
 # Description:
 
+
 class Checkers:
     """
     Represents a checkers game, including board and gameplay.
@@ -12,7 +13,7 @@ class Checkers:
     WHITE_CHECKERS = 12
 
     def __init__(self):
-        
+        self._board = Board()
 
     def create_player(self, player_name, piece_color):
         """Returns a player object with name and piece color."""
@@ -67,8 +68,8 @@ class Board:
 
     def __init__(self):
         self._board = []
-            # TODO Shorten code for creating a board w/ pieces.
-            # Creates board and places starting pieces.
+        # TODO Shorten code for creating a board w/ pieces.
+        # Creates board and places starting pieces.
         for i in range(8):
             temp_list = []
             for i in range(8):
@@ -106,6 +107,7 @@ class Board:
 
             self._board.append(temp_list)
 
+
 class Piece:
     """Represents a checkers piece"""
 
@@ -113,8 +115,23 @@ class Piece:
         self._piece_color = piece_color
         self._piece_type = piece_type
 
-    def move_piece(self):
-        """"""
+    def check_moves(self, starting_square_location, destination_square_location):
+        """Checks if move available for piece type."""
+        # King piece moves
+        if self._piece_type == "king":
+            pass
+
+        # Triple king piece moves
+        elif self._piece_type == "triple_king":
+            pass
+
+        # Regular piece moves
+        else:
+            pass
+
+    def get_piece_color(self):
+        """Returns piece's color."""
+        return self._piece_color
 
     def set_piece_type(self, piece_type):
         """Sets piece to piece_type."""
@@ -130,19 +147,24 @@ class Piece:
 # Exceptions
 class OutofTurn(Exception):
     """"""
+
     pass
+
 
 class InvalidSquare(Exception):
     """"""
+
     pass
+
 
 class InvalidPlayer(Exception):
     """"""
+
     pass
 
 
 game = Checkers()
-for row in game._board:
+for row in game._board._board:
     print(row)
 
 # Player1 = game.create_player("Adam", "White")
