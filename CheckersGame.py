@@ -10,7 +10,8 @@ class Checkers:
 
     Attributes:
     - board is a Board object for game with starting pieces in place
-    - players is a dictionary of player objects with 
+    - players is a list of player objects
+    - players_turn keeps track of who's turn it is.
     """
 
     BLACK_CHECKERS = 12
@@ -19,14 +20,14 @@ class Checkers:
     def __init__(self):
         self._board = Board()
         # TODO Decide how you want to implement a list/dict of the players so they can be accessed later.
-        self._players = {}
+        self._players = []
         self._players_turn = "Black"
 
     def create_player(self, player_name, piece_color):
         """Returns a player object with name and piece color."""
         # TODO check on whether the parameter name should be piece_color or checker_color. Seems to be conflict between what is mentioned here and for the Player class constructor.
         created_player = Player(player_name, piece_color)
-        self._players[created_player]
+        self._players.append(created_player)
         return created_player
 
     def play_game(
@@ -37,7 +38,7 @@ class Checkers:
         location.
         """
         # Checks if correct player made move
-        if player
+        # if player
 
         starting_row = starting_square_location[0]
         starting_column = starting_square_location[1]
@@ -97,9 +98,13 @@ class Player:
         self._triple_king_count = 0
         self._captured_pieces_count = 0
 
-    def get_piece_color(self, player_name):
-        """Returns piece color of given player name."""
-        return 
+    def get_piece_color(self):
+        """Returns piece color."""
+        return self._checker_color
+
+    def get_player_name(self):
+        """Returns player name."""
+        return self._player_name
 
     def get_king_count(self):
         """Returns the number of king pieces that the player has."""
@@ -230,18 +235,10 @@ Player2 = game.create_player("Lucy", "Black")
 
 game.play_game("Lucy", (5, 6), (4, 7))
 
-print("\n")
-
-for row in game._board.get_board():
-    print(row)
-
 game.play_game("Adam", (2, 1), (3, 0))
 
-print("\n")
-
-for row in game._board.get_board():
-    print(row)
-
+for player_obj in game._players:
+    print(f"{player_obj._player_name}: {player_obj.get_piece_color()}")
 # print(game.get_checker_details((0, 1)))
 
 # Player1.get_captured_pieces_count()
