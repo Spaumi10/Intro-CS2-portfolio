@@ -29,14 +29,23 @@ class Checkers:
         """
 
     def get_checker_details(self, square_location):
-        """Returns the checker deatils present at the square_location."""
+        """Returns the checker details present at the square_location."""
+        row = square_location[0]
+        column = square_location[1]
+        try:
+            if self._board.get_board()[row][column]:
+                return self._board.get_board()[row][column]
+            else:
+                return None
+        except IndexError:
+            raise InvalidSquare
 
     def print_board(self):
         """
         Prints the current checker board, with placement of current pieces,
         None for empty spaces.
         """
-        print(self._board._board)
+        print(self._board.get_board())
 
     def game_winner(self):
         """
@@ -53,15 +62,21 @@ class Player:
     def __init__(self, player_name, checker_color):
         self._player_name = player_name
         self._checker_color = checker_color
+        self._king_count = 0
+        self._triple_king_count = 0
+        self._captured_pieces_count = 0
 
     def get_king_count(self):
         """Returns the number of king pieces that the player has."""
+        return self._king_count
 
     def get_triple_king_count(self):
         """Returns the number of triple king pieces that the player has."""
+        return self._triple_king_count
 
     def get_captured_pieces_count(self):
         """Returns the number of opponent peces that the player has captured."""
+        return self._captured_pieces_count
 
 
 class Board:
@@ -107,6 +122,10 @@ class Board:
                     temp_list.append(None)
 
             self._board.append(temp_list)
+
+    def get_board(self):
+        """Returns board."""
+        return self._board
 
 
 class Piece:
@@ -171,17 +190,19 @@ class InvalidPlayer(Exception):
 
 
 game = Checkers()
-for row in game._board._board:
+
+for row in game._board.get_board():
     print(row)
 
-# Player1 = game.create_player("Adam", "White")
+Player1 = game.create_player("Adam", "White")
 
-# Player2 = game.create_player("Lucy", "Black")
+Player2 = game.create_player("Lucy", "Black")
+
 
 # game.play_game("Lucy", (5, 6), (4, 7))
 
 # game.play_game("Adam", (2,1), (3,0))
 
-# game.get_checker_details((3,1))
+print(game.get_checker_details((3, 1)))
 
 # Player1.get_captured_pieces_count()
