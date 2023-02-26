@@ -7,6 +7,10 @@
 class Checkers:
     """
     Represents a checkers game, including board and gameplay.
+
+    Attributes:
+    - board is a Board object for game with starting pieces in place
+    - players is a dictionary of player objects with 
     """
 
     BLACK_CHECKERS = 12
@@ -14,11 +18,16 @@ class Checkers:
 
     def __init__(self):
         self._board = Board()
+        # TODO Decide how you want to implement a list/dict of the players so they can be accessed later.
+        self._players = {}
+        self._players_turn = "Black"
 
     def create_player(self, player_name, piece_color):
         """Returns a player object with name and piece color."""
         # TODO check on whether the parameter name should be piece_color or checker_color. Seems to be conflict between what is mentioned here and for the Player class constructor.
-        return Player(player_name, piece_color)
+        created_player = Player(player_name, piece_color)
+        self._players[created_player]
+        return created_player
 
     def play_game(
         self, player_name, starting_square_location, destination_square_location
@@ -27,6 +36,9 @@ class Checkers:
         Moves the player's piece from the starting location to the destination
         location.
         """
+        # Checks if correct player made move
+        if player
+
         starting_row = starting_square_location[0]
         starting_column = starting_square_location[1]
         ending_row = destination_square_location[0]
@@ -40,6 +52,12 @@ class Checkers:
 
         # Revert starting_square to None.
         self._board.get_board()[starting_row][starting_column] = None
+
+        # Moves turn to next player.
+        if self._players_turn == "Black":
+            self._players_turn = "White"
+        else:
+            self._players_turn = "Black"
 
     def get_checker_details(self, square_location):
         """Returns the checker details present at the square_location."""
@@ -78,6 +96,10 @@ class Player:
         self._king_count = 0
         self._triple_king_count = 0
         self._captured_pieces_count = 0
+
+    def get_piece_color(self, player_name):
+        """Returns piece color of given player name."""
+        return 
 
     def get_king_count(self):
         """Returns the number of king pieces that the player has."""
