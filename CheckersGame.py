@@ -27,6 +27,19 @@ class Checkers:
         Moves the player's piece from the starting location to the destination
         location.
         """
+        starting_row = starting_square_location[0]
+        starting_column = starting_square_location[1]
+        ending_row = destination_square_location[0]
+        ending_column = destination_square_location[1]
+
+        # Get piece object that needs moved.
+        piece_to_move = self._board.get_board()[starting_row][starting_column]
+
+        # Move piece
+        self._board.get_board()[ending_row][ending_column] = piece_to_move
+
+        # Revert starting_square to None.
+        self._board.get_board()[starting_row][starting_column] = None
 
     def get_checker_details(self, square_location):
         """Returns the checker details present at the square_location."""
@@ -93,13 +106,13 @@ class Board:
                 # Places white pieces on 1st and 3rd row from top.
                 if len(self._board) % 2 == 0 and len(self._board) < 3:
                     if len(temp_list) % 2 == 1:
-                        temp_list.append(Piece("White"))
+                        temp_list.append(Piece("White", "White"))
                     else:
                         temp_list.append(None)
                 # Places white pieces on 2nd row from top.
                 elif len(self._board) % 2 == 1 and len(self._board) < 3:
                     if len(temp_list) % 2 == 0:
-                        temp_list.append(Piece("White"))
+                        temp_list.append(Piece("White", "White"))
                     else:
                         temp_list.append(None)
 
@@ -107,13 +120,13 @@ class Board:
                 # Places black pieces on 6th and 8th row from top.
                 elif len(self._board) % 2 == 0 and len(self._board) > 4:
                     if len(temp_list) % 2 == 1:
-                        temp_list.append(Piece("Black"))
+                        temp_list.append(Piece("Black", "Black"))
                     else:
                         temp_list.append(None)
                 # Places black pieces on 7th row from top.
                 elif len(self._board) % 2 == 1 and len(self._board) > 4:
                     if len(temp_list) % 2 == 0:
-                        temp_list.append(Piece("Black"))
+                        temp_list.append(Piece("Black", "Black"))
                     else:
                         temp_list.append(None)
 
@@ -131,7 +144,7 @@ class Board:
 class Piece:
     """Represents a checkers piece"""
 
-    def __init__(self, piece_color, piece_type=""):
+    def __init__(self, piece_color, piece_type):
         self._piece_color = piece_color
         self._piece_type = piece_type
 
@@ -158,16 +171,10 @@ class Piece:
         self._piece_type = piece_type
 
     def __str__(self) -> str:
-        return self._piece_color
+        return self._piece_type
 
     def __repr__(self) -> str:
-        return self._piece_color
-
-    # def get_kinged(self):
-    #     """"""
-
-    # def get_triple_kinged(self):
-    #     """"""
+        return self._piece_type
 
 
 # Exceptions
@@ -199,10 +206,20 @@ Player1 = game.create_player("Adam", "White")
 Player2 = game.create_player("Lucy", "Black")
 
 
-# game.play_game("Lucy", (5, 6), (4, 7))
+game.play_game("Lucy", (5, 6), (4, 7))
 
-# game.play_game("Adam", (2,1), (3,0))
+print("\n")
 
-print(game.get_checker_details((3, 1)))
+for row in game._board.get_board():
+    print(row)
+
+game.play_game("Adam", (2, 1), (3, 0))
+
+print("\n")
+
+for row in game._board.get_board():
+    print(row)
+
+# print(game.get_checker_details((0, 1)))
 
 # Player1.get_captured_pieces_count()
