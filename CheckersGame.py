@@ -19,7 +19,6 @@ class Checkers:
 
     def __init__(self):
         self._board = Board()
-        # TODO Decide how you want to implement a list/dict of the players so they can be accessed later.
         self._players = []
         self._players_turn = "Black"
 
@@ -177,6 +176,7 @@ class Piece:
 
     def check_moves(self, starting_square_location, destination_square_location):
         """Checks if move available for piece type."""
+        # TODO Not finished with checking moves.
         # King piece moves
         if self._piece_type == "king":
             pass
