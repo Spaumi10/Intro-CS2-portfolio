@@ -24,7 +24,6 @@ class Checkers:
 
     def create_player(self, player_name, piece_color):
         """Returns a player object with name and piece color."""
-        # TODO check on whether the parameter name should be piece_color or checker_color. Seems to be conflict between what is mentioned here and for the Player class constructor.
         created_player = Player(player_name, piece_color)
         self._players.append(created_player)
         return created_player
@@ -36,7 +35,7 @@ class Checkers:
         Moves the player's piece from the starting location to the destination
         location.
         """
-
+        # TODO look into refactoring some of this code below into other methods.
         # Gets current and non-current player object and collects current player name to check below.
         current_player_names = []
         for player_obj in self._players:
@@ -60,6 +59,7 @@ class Checkers:
             ending_column = destination_square_location[1]
 
             # Get piece object that needs moved.
+            self.get_checker_details((0,7))
             piece_to_move = self._board.get_board()[starting_row][starting_column]
 
             # Checks if current player moved other player's piece.
@@ -68,6 +68,14 @@ class Checkers:
 
             # Move piece
             self._board.get_board()[ending_row][ending_column] = piece_to_move
+
+            # Checking if move took piece, removing piece, and adding to captured pieces.
+            self.capture_pieces(
+                starting_row, ending_row, starting_column, ending_column
+            )
+            # if square_in_question.get_piece_color() == other_player.get_player_color():
+            #     square_in_question = None
+            #     other_player.add_captured_piece(1)
 
             # Revert starting_square to None.
             self._board.get_board()[starting_row][starting_column] = None
@@ -94,6 +102,19 @@ class Checkers:
         except IndexError:
             raise InvalidSquare
 
+    def capture_pieces(self, starting_row, ending_row, starting_column, ending_column):
+        """Calculates number of pieces captured and returns quantity of pieces."""
+        print(f"starting row: {starting_row}")
+        print(f"ending row: {ending_row}")
+        print(f"starting col: {starting_column}")
+        print(f"ending col: {ending_column}")
+        row_coordinates = [num for num in range(1, abs(starting_row - ending_row))]
+        column_coordinates = [
+            num for num in range(1, abs(starting_column - ending_column))
+        ]
+        print(row_coordinates)
+        print(column_coordinates)
+
     def print_board(self):
         """
         Prints the current checker board, with placement of current pieces,
@@ -113,28 +134,40 @@ class Player:
     Represents a checkers player.
     """
 
-    def __init__(self, player_name, checker_color):
+    def __init__(self, player_name, piece_color):
         self._player_name = player_name
-        self._checker_color = checker_color
+        self._piece_color = piece_color
         self._king_count = 0
         self._triple_king_count = 0
         self._captured_pieces_count = 0
 
     def get_piece_color(self):
         """Returns piece color."""
-        return self._checker_color
+        return self._piece_color
 
     def get_player_name(self):
         """Returns player name."""
         return self._player_name
 
+    def add_king(self):
+        """Adds a king to players pieces."""
+        self._king_count += 1
+
     def get_king_count(self):
         """Returns the number of king pieces that the player has."""
         return self._king_count
 
+    def add_triple_king(self):
+        """Adds a triple king to players pieces."""
+        self._triple_king_count += 1
+
     def get_triple_king_count(self):
         """Returns the number of triple king pieces that the player has."""
         return self._triple_king_count
+
+    def add_captured_piece(self, quantity):
+        """Adds captured piece to count."""
+        self._captured_pieces_count += quantity
 
     def get_captured_pieces_count(self):
         """Returns the number of opponent peces that the player has captured."""
@@ -263,12 +296,12 @@ Player2 = game.create_player("Lucy", "Black")
 
 game.play_game("Lucy", (5, 6), (4, 7))
 
-game.play_game("Adam", (2, 1), (3, 0))
+game.play_game("Adam", (0, 7), (7, 0))
 
 
-# print("\n")
-# for row in game._board.get_board():
-#     print(row)
+print("\n")
+for row in game._board.get_board():
+    print(row)
 
 
 # print(game.get_checker_details((0, 1)))
