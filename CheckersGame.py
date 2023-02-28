@@ -36,28 +36,51 @@ class Checkers:
         Moves the player's piece from the starting location to the destination
         location.
         """
+
+        # Gets current and non-current player object and collects current player name to check below.
+        current_player_names = []
+        for player_obj in self._players:
+            current_player_names.append(player_obj.get_player_name())
+            if player_obj.get_piece_color() == self._players_turn:
+                current_player = player_obj
+            else:
+                other_player = player_obj
+
+        # Checks if passed player_name is a current player.
+        if player_name not in current_player_names:
+            raise InvalidPlayer
+
         # Checks if correct player made move
-        # if player
-
-        starting_row = starting_square_location[0]
-        starting_column = starting_square_location[1]
-        ending_row = destination_square_location[0]
-        ending_column = destination_square_location[1]
-
-        # Get piece object that needs moved.
-        piece_to_move = self._board.get_board()[starting_row][starting_column]
-
-        # Move piece
-        self._board.get_board()[ending_row][ending_column] = piece_to_move
-
-        # Revert starting_square to None.
-        self._board.get_board()[starting_row][starting_column] = None
-
-        # Moves turn to next player.
-        if self._players_turn == "Black":
-            self._players_turn = "White"
+        if player_name != current_player.get_player_name():
+            raise OutofTurn
         else:
-            self._players_turn = "Black"
+            starting_row = starting_square_location[0]
+            starting_column = starting_square_location[1]
+            ending_row = destination_square_location[0]
+            ending_column = destination_square_location[1]
+
+            # Get piece object that needs moved.
+            piece_to_move = self._board.get_board()[starting_row][starting_column]
+
+            # Checks if current player moved other player's piece.
+            if piece_to_move.get_piece_color() != self._players_turn:
+                raise InvalidSquare
+
+            # Move piece
+            self._board.get_board()[ending_row][ending_column] = piece_to_move
+
+            # Revert starting_square to None.
+            self._board.get_board()[starting_row][starting_column] = None
+
+            # TODO Account for additional jumps by current_player, before switching to next player.
+
+            # Moves turn to next player.
+            if self._players_turn == "Black":
+                self._players_turn = "White"
+            else:
+                self._players_turn = "Black"
+
+            return other_player.get_captured_pieces_count()
 
     def get_checker_details(self, square_location):
         """Returns the checker details present at the square_location."""
@@ -208,11 +231,15 @@ class Piece:
 class OutofTurn(Exception):
     """"""
 
-    pass
+    def __str__(self):
+        return "It is not your turn."
 
 
 class InvalidSquare(Exception):
     """"""
+
+    def __str__(self):
+        return "Your move would take you off the board or you picked a piece that is not yours."
 
     pass
 
@@ -220,7 +247,8 @@ class InvalidSquare(Exception):
 class InvalidPlayer(Exception):
     """"""
 
-    pass
+    def __str__(self):
+        return "That name is not a current player of this game."
 
 
 game = Checkers()
@@ -237,8 +265,12 @@ game.play_game("Lucy", (5, 6), (4, 7))
 
 game.play_game("Adam", (2, 1), (3, 0))
 
-for player_obj in game._players:
-    print(f"{player_obj._player_name}: {player_obj.get_piece_color()}")
+
+# print("\n")
+# for row in game._board.get_board():
+#     print(row)
+
+
 # print(game.get_checker_details((0, 1)))
 
 # Player1.get_captured_pieces_count()
