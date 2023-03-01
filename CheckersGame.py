@@ -133,9 +133,7 @@ class Checkers:
 
         # For moves going down and right.
         elif starting_row < ending_row and starting_column < ending_column:
-            row_coordinates = [
-                num for num in range(ending_column - 1, starting_column, -1)
-            ]
+            row_coordinates = [num for num in range(ending_row - 1, starting_row, -1)]
             column_coordinates = [
                 num for num in range(ending_column - 1, starting_column, -1)
             ]
@@ -149,6 +147,11 @@ class Checkers:
 
         print(f"row coords: {row_coordinates}")
         print(f"col_coords: {column_coordinates}")
+
+        # Obtain coordinates of squares that were jumpped.
+        coordinates = zip(row_coordinates, column_coordinates)
+        for coordinate in coordinates:
+
 
     def print_board(self):
         """
