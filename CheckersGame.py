@@ -50,45 +50,53 @@ class Checkers:
             raise InvalidPlayer
 
         # Checks if correct player made move
-        if player_name != current_player.get_player_name():
-            raise OutofTurn
+        # if player_name != current_player.get_player_name():
+        #     raise OutofTurn
+        # else:
+        starting_row = starting_square_location[0]
+        starting_column = starting_square_location[1]
+        ending_row = destination_square_location[0]
+        ending_column = destination_square_location[1]
+
+        # Get piece object that needs moved.
+        piece_to_move = self._board.get_board()[starting_row][starting_column]
+
+        # Checks if current player moved other player's piece.
+        # if piece_to_move.get_piece_color() != self._players_turn:
+        #     raise InvalidSquare
+
+        # Move piece
+        self._board.get_board()[ending_row][ending_column] = piece_to_move
+
+        # TODO need to check if destination square is open.
+
+        # Checking if move took piece, removing piece, and adding to captured pieces.
+        # additional_move = True
+        # while additional_move:
+        self.capture_pieces(starting_row, ending_row, starting_column, ending_column)
+        # if square_in_question.get_piece_color() == other_player.get_player_color():
+        #     square_in_question = None
+        #     other_player.add_captured_piece(1)
+
+        # Revert starting_square to None.
+        self._board.get_board()[starting_row][starting_column] = None
+
+        # This is how I am handling do they have an extra jump.
+        # additional_move_response = input(
+        #     "Do you have an another jump? (y/n): "
+        # ).lower()
+        # if additional_move_response != "y":
+        #     additional_move = False
+
+        # TODO Account for additional jumps by current_player, before switching to next player.
+
+        # Moves turn to next player.
+        if self._players_turn == "Black":
+            self._players_turn = "White"
         else:
-            starting_row = starting_square_location[0]
-            starting_column = starting_square_location[1]
-            ending_row = destination_square_location[0]
-            ending_column = destination_square_location[1]
+            self._players_turn = "Black"
 
-            # Get piece object that needs moved.
-            self.get_checker_details((0,7))
-            piece_to_move = self._board.get_board()[starting_row][starting_column]
-
-            # Checks if current player moved other player's piece.
-            if piece_to_move.get_piece_color() != self._players_turn:
-                raise InvalidSquare
-
-            # Move piece
-            self._board.get_board()[ending_row][ending_column] = piece_to_move
-
-            # Checking if move took piece, removing piece, and adding to captured pieces.
-            self.capture_pieces(
-                starting_row, ending_row, starting_column, ending_column
-            )
-            # if square_in_question.get_piece_color() == other_player.get_player_color():
-            #     square_in_question = None
-            #     other_player.add_captured_piece(1)
-
-            # Revert starting_square to None.
-            self._board.get_board()[starting_row][starting_column] = None
-
-            # TODO Account for additional jumps by current_player, before switching to next player.
-
-            # Moves turn to next player.
-            if self._players_turn == "Black":
-                self._players_turn = "White"
-            else:
-                self._players_turn = "Black"
-
-            return other_player.get_captured_pieces_count()
+        return other_player.get_captured_pieces_count()
 
     def get_checker_details(self, square_location):
         """Returns the checker details present at the square_location."""
@@ -108,12 +116,39 @@ class Checkers:
         print(f"ending row: {ending_row}")
         print(f"starting col: {starting_column}")
         print(f"ending col: {ending_column}")
-        row_coordinates = [num for num in range(1, abs(starting_row - ending_row))]
-        column_coordinates = [
-            num for num in range(1, abs(starting_column - ending_column))
-        ]
-        print(row_coordinates)
-        print(column_coordinates)
+
+        # TODO still need to code taking pieces for each type of move.
+
+        # For moves going up and right.
+        if starting_row > ending_row and starting_column < ending_column:
+            row_coordinates = [num for num in range(ending_row + 1, starting_row)]
+            column_coordinates = [
+                num for num in range(ending_column - 1, starting_column, -1)
+            ]
+
+        # For moves going up and left.
+        elif starting_row > ending_row and starting_column > ending_column:
+            row_coordinates = [num for num in range(ending_row + 1, starting_row)]
+            column_coordinates = [num for num in range(ending_row + 1, starting_row)]
+
+        # For moves going down and right.
+        elif starting_row < ending_row and starting_column < ending_column:
+            row_coordinates = [
+                num for num in range(ending_column - 1, starting_column, -1)
+            ]
+            column_coordinates = [
+                num for num in range(ending_column - 1, starting_column, -1)
+            ]
+
+        # For moves going down and left.
+        elif starting_row < ending_row and starting_column > ending_column:
+            row_coordinates = [num for num in range(ending_row - 1, starting_row, -1)]
+            column_coordinates = [
+                num for num in range(ending_column + 1, starting_column)
+            ]
+
+        print(f"row coords: {row_coordinates}")
+        print(f"col_coords: {column_coordinates}")
 
     def print_board(self):
         """
@@ -294,9 +329,10 @@ Player1 = game.create_player("Adam", "White")
 Player2 = game.create_player("Lucy", "Black")
 
 
-game.play_game("Lucy", (5, 6), (4, 7))
+game.play_game("Lucy", (5, 4), (3, 2))
 
-game.play_game("Adam", (0, 7), (7, 0))
+game.play_game("Adam", (2, 1), (5, 4))
+# game.play_game("Adam", (2, 3), (5, 0))
 
 
 print("\n")
