@@ -59,6 +59,9 @@ class Checkers:
             ending_row = destination_square_location[0]
             ending_column = destination_square_location[1]
 
+            if self._board.get_board()[ending_row][ending_column]:
+                raise InvalidDestination
+
             # Get piece object that needs moved.
             piece_to_move = self._board.get_board()[starting_row][starting_column]
 
@@ -68,8 +71,6 @@ class Checkers:
 
             # Move piece
             self._board.get_board()[ending_row][ending_column] = piece_to_move
-
-            # TODO need to check if destination square is open.
 
             # Checking if move took piece, removing piece, and adding to captured pieces.
             self.capture_pieces(
@@ -151,7 +152,9 @@ class Checkers:
         # For moves going up and left.
         elif starting_row > ending_row and starting_column > ending_column:
             row_coordinates = [num for num in range(ending_row + 1, starting_row)]
-            column_coordinates = [num for num in range(ending_row + 1, starting_row)]
+            column_coordinates = [
+                num for num in range(ending_column + 1, starting_column)
+            ]
 
         # For moves going down and right.
         elif starting_row < ending_row and starting_column < ending_column:
@@ -179,7 +182,7 @@ class Checkers:
                 elif "king" in current_square.get_piece_type():
                     current_square.remove_king()
 
-                current_square = None
+                self._board.get_board()[coordinate[0]][coordinate[1]] = None
                 captured_pieces += 1
                 other_player.add_captured_piece(1)
                 # A triple king can take 2 pieces at most. This stops the search
@@ -371,37 +374,63 @@ class InvalidPlayer(Exception):
         return "That name is not a current player of this game."
 
 
-game = Checkers()
+class InvalidDestination(Exception):
+    """"""
 
-for row in game._board.get_board():
-    print(row)
+    def __str__(self):
+        return "Your destination is on top of a current piece. Not valid."
+
+
+game = Checkers()
 
 Player1 = game.create_player("Adam", "White")
 
 Player2 = game.create_player("Lucy", "Black")
 
 
-game.play_game("Lucy", (5, 4), (0, 2))
+game.play_game("Lucy", (5, 4), (4, 3))
 
-game.play_game("Adam", (2, 1), (7, 7))
-game.play_game("Lucy", (0, 2), (7, 3))
 
-print("\n")
-for row in game._board.get_board():
-    print(row)
-
-game.play_game("Adam", (7, 7), (0, 0))
+game.play_game("Adam", (2, 1), (3, 2))
 
 print("\n")
 for row in game._board.get_board():
     print(row)
 
+game.play_game("Lucy", (4, 3), (3, 2))
 
-print(f"P1 King count: {Player1.get_king_count()}")
-print(f"P1 Triple king count: {Player1.get_triple_king_count()}")
-print(f"P2 King count: {Player2.get_king_count()}")
-print(f"P2 Triple king count: {Player2.get_triple_king_count()}")
+
+# game.play_game("Adam", (2, 7), (3, 6))
+
+
+# game.play_game("Lucy", (5, 6), (4, 5))
+
+
+# game.play_game("Adam", (3, 6), (5, 4))
+
+
+# game.play_game("Lucy", (6, 5), (4, 3))
+
+
+# game.play_game("Adam", (2, 3), (3, 4))
+
+
+# game.play_game("Lucy", (5, 0), (4, 1))
+
+
+# game.play_game("Adam", (1, 2), (2, 3))
+
+# game.play_game("Lucy", (2, 1), (0, 0))
+
+# game.play_game("Adam", (3, 4), (7, 1))
+
+# game.play_game("Lucy", (0, 0), (7, 7))
+
+# game.play_game("Adam", (7, 1), (0, 0))
+# print("\n")
+# for row in game._board.get_board():
+#     print(row)
 
 # print(game.get_checker_details((0, 1)))
 
-# print(Player2.get_captured_pieces_count())
+# print(Player1.get_captured_pieces_count())
