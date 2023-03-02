@@ -1,7 +1,8 @@
 # Author: Michael Spaulding
 # GitHub username: Spaumi10
-# Date: 02/25/2023
-# Description:
+# Date: 03/01/2023
+# Description: Program that replicates a checkers game with multiple classes and
+# methods.
 
 
 class Checkers:
@@ -50,43 +51,43 @@ class Checkers:
             raise InvalidPlayer
 
         # Checks if correct player made move
-        # if player_name != current_player.get_player_name():
-        #     raise OutofTurn
-        # else:
-        starting_row = starting_square_location[0]
-        starting_column = starting_square_location[1]
-        ending_row = destination_square_location[0]
-        ending_column = destination_square_location[1]
+        if player_name != current_player.get_player_name():
+            raise OutofTurn
+        else:
+            starting_row = starting_square_location[0]
+            starting_column = starting_square_location[1]
+            ending_row = destination_square_location[0]
+            ending_column = destination_square_location[1]
 
-        # Get piece object that needs moved.
-        piece_to_move = self._board.get_board()[starting_row][starting_column]
+            # Get piece object that needs moved.
+            piece_to_move = self._board.get_board()[starting_row][starting_column]
 
-        # Checks if current player moved other player's piece.
-        # if piece_to_move.get_piece_color() != self._players_turn:
-        #     raise InvalidSquare
+            # Checks if current player moved other player's piece.
+            if piece_to_move.get_piece_color() != self._players_turn:
+                raise InvalidSquare
 
-        # Move piece
-        self._board.get_board()[ending_row][ending_column] = piece_to_move
+            # Move piece
+            self._board.get_board()[ending_row][ending_column] = piece_to_move
 
-        # TODO need to check if destination square is open.
+            # TODO need to check if destination square is open.
 
-        # Checking if move took piece, removing piece, and adding to captured pieces.
-        # additional_move = True
-        # while additional_move:
-        self.capture_pieces(starting_row, ending_row, starting_column, ending_column)
-        # if square_in_question.get_piece_color() == other_player.get_player_color():
-        #     square_in_question = None
-        #     other_player.add_captured_piece(1)
+            # Checking if move took piece, removing piece, and adding to captured pieces.
+            self.capture_pieces(
+                starting_row, ending_row, starting_column, ending_column, other_player
+            )
 
-        # Revert starting_square to None.
-        self._board.get_board()[starting_row][starting_column] = None
+            # Revert starting_square to None.
+            self._board.get_board()[starting_row][starting_column] = None
 
-        # This is how I am handling do they have an extra jump.
-        # additional_move_response = input(
-        #     "Do you have an another jump? (y/n): "
-        # ).lower()
-        # if additional_move_response != "y":
-        #     additional_move = False
+            # This is how I am handling do they have an extra jump.
+            # additional_move_response = input(
+            #     "Do you have an another jump? (y/n): "
+            # ).lower()
+            # if additional_move_response != "y":
+            #     additional_move = False
+
+            # Checks if piece should be kinged or triple kinged.
+            self.king_check(current_player, piece_to_move, ending_row)
 
         # TODO Account for additional jumps by current_player, before switching to next player.
 
@@ -110,15 +111,36 @@ class Checkers:
         except IndexError:
             raise InvalidSquare
 
-    def capture_pieces(self, starting_row, ending_row, starting_column, ending_column):
+    # TODO test king_check(). Tested, and passed, by brute force, not during actual game.
+    def king_check(self, player_obj, piece_obj, ending_row):
+        """
+        Checks if piece should be made a king or triple king and, if so,
+        modifies piece object and add piece type to player object..
+        """
+        # Check for making White or Black to king.
+        if piece_obj.get_piece_type() == "Black" and ending_row == 0:
+            piece_obj.set_piece_type("Black_king")
+            player_obj.add_king()
+
+        elif piece_obj.get_piece_type() == "White" and ending_row == 7:
+            piece_obj.set_piece_type("White_king")
+            player_obj.add_king()
+
+        # Check for making White_king or Black_king to triple king.
+        elif piece_obj.get_piece_type() == "Black_king" and ending_row == 7:
+            piece_obj.set_piece_type("Black_Triple_King")
+            player_obj.remove_king()
+            player_obj.add_triple_king()
+
+        elif piece_obj.get_piece_type() == "White_king" and ending_row == 0:
+            piece_obj.set_piece_type("White_Triple_king")
+            player_obj.remove_king()
+            player_obj.add_triple_king()
+
+    def capture_pieces(
+        self, starting_row, ending_row, starting_column, ending_column, other_player
+    ):
         """Calculates number of pieces captured and returns quantity of pieces."""
-        print(f"starting row: {starting_row}")
-        print(f"ending row: {ending_row}")
-        print(f"starting col: {starting_column}")
-        print(f"ending col: {ending_column}")
-
-        # TODO still need to code taking pieces for each type of move.
-
         # For moves going up and right.
         if starting_row > ending_row and starting_column < ending_column:
             row_coordinates = [num for num in range(ending_row + 1, starting_row)]
@@ -145,13 +167,28 @@ class Checkers:
                 num for num in range(ending_column + 1, starting_column)
             ]
 
-        print(f"row coords: {row_coordinates}")
-        print(f"col_coords: {column_coordinates}")
-
         # Obtain coordinates of squares that were jumpped.
         coordinates = zip(row_coordinates, column_coordinates)
+        captured_pieces = 0
+        # Searches jumped squares for opponent pieces and removes if present.
         for coordinate in coordinates:
+            current_square = self._board.get_board()[coordinate[0]][coordinate[1]]
+            if current_square:
+                if "triple" in current_square.get_piece_type():
+                    current_square.remove_triple_king()
+                elif "king" in current_square.get_piece_type():
+                    current_square.remove_king()
 
+                current_square = None
+                captured_pieces += 1
+                other_player.add_captured_piece(1)
+                # A triple king can take 2 pieces at most. This stops the search
+                # for additional squares that may have been jumped, but there
+                # can't be additional opponent pieces (this assumes the player
+                # is following this rule, which seemed to be indicated in Ed
+                # discussion by professor.)
+                if captured_pieces == 2:
+                    break
 
     def print_board(self):
         """
@@ -188,16 +225,24 @@ class Player:
         return self._player_name
 
     def add_king(self):
-        """Adds a king to players pieces."""
+        """Adds a king to player's pieces."""
         self._king_count += 1
+
+    def remove_king(self):
+        """Removes a king from player's pieces."""
+        self._king_count -= 1
 
     def get_king_count(self):
         """Returns the number of king pieces that the player has."""
         return self._king_count
 
     def add_triple_king(self):
-        """Adds a triple king to players pieces."""
+        """Adds a triple king to player's pieces."""
         self._triple_king_count += 1
+
+    def remove_triple_king(self):
+        """Removes a triple king from player's pieces."""
+        self._triple_king_count -= 1
 
     def get_triple_king_count(self):
         """Returns the number of triple king pieces that the player has."""
@@ -287,9 +332,13 @@ class Piece:
         """Returns piece's color."""
         return self._piece_color
 
-    def set_piece_type(self, piece_type):
+    def get_piece_type(self):
+        """Returns piece type."""
+        return self._piece_type
+
+    def set_piece_type(self, new_piece_type):
         """Sets piece to piece_type."""
-        self._piece_type = piece_type
+        self._piece_type = new_piece_type
 
     def __str__(self) -> str:
         return self._piece_type
@@ -332,17 +381,27 @@ Player1 = game.create_player("Adam", "White")
 Player2 = game.create_player("Lucy", "Black")
 
 
-game.play_game("Lucy", (5, 4), (3, 2))
+game.play_game("Lucy", (5, 4), (0, 2))
 
-game.play_game("Adam", (2, 1), (5, 4))
-# game.play_game("Adam", (2, 3), (5, 0))
+game.play_game("Adam", (2, 1), (7, 7))
+game.play_game("Lucy", (0, 2), (7, 3))
 
+print("\n")
+for row in game._board.get_board():
+    print(row)
+
+game.play_game("Adam", (7, 7), (0, 0))
 
 print("\n")
 for row in game._board.get_board():
     print(row)
 
 
+print(f"P1 King count: {Player1.get_king_count()}")
+print(f"P1 Triple king count: {Player1.get_triple_king_count()}")
+print(f"P2 King count: {Player2.get_king_count()}")
+print(f"P2 Triple king count: {Player2.get_triple_king_count()}")
+
 # print(game.get_checker_details((0, 1)))
 
-# Player1.get_captured_pieces_count()
+# print(Player2.get_captured_pieces_count())
