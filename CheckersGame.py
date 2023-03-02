@@ -59,6 +59,7 @@ class Checkers:
             ending_row = destination_square_location[0]
             ending_column = destination_square_location[1]
 
+            # Checks if ending square is already occupied.
             if self._board.get_board()[ending_row][ending_column]:
                 raise InvalidDestination
 
@@ -112,7 +113,6 @@ class Checkers:
         except IndexError:
             raise InvalidSquare
 
-    # TODO test king_check(). Tested, and passed, by brute force, not during actual game.
     def king_check(self, player_obj, piece_obj, ending_row):
         """
         Checks if piece should be made a king or triple king and, if so,
@@ -205,6 +205,16 @@ class Checkers:
         Returns the name of the winning player, or if game not over, returns
         that fact.
         """
+        # TODO finish this.
+        winner = None
+        for player in self._players():
+            if player.get_captured_pieces_count() == 12:
+                defeated_player = player
+            else:
+                pass
+
+        if winner is None:
+            return "Game has not ended"
 
 
 class Player:
