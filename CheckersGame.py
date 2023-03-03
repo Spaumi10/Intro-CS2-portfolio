@@ -15,9 +15,6 @@ class Checkers:
     - players_turn keeps track of who's turn it is.
     """
 
-    BLACK_CHECKERS = 12
-    WHITE_CHECKERS = 12
-
     def __init__(self):
         self._board = Board()
         self._players = []
@@ -60,8 +57,8 @@ class Checkers:
             ending_column = destination_square_location[1]
 
             # Checks if ending square is already occupied.
-            if self._board.get_board()[ending_row][ending_column]:
-                raise InvalidDestination
+            # if self._board.get_board()[ending_row][ending_column]:
+            #     raise InvalidDestination
 
             # Get piece object that needs moved.
             piece_to_move = self._board.get_board()[starting_row][starting_column]
@@ -205,16 +202,16 @@ class Checkers:
         Returns the name of the winning player, or if game not over, returns
         that fact.
         """
-        # TODO finish this.
-        winner = None
         for player in self._players():
             if player.get_captured_pieces_count() == 12:
                 defeated_player = player
             else:
-                pass
+                potential_winner = player
 
-        if winner is None:
+        if not defeated_player:
             return "Game has not ended"
+        else:
+            return potential_winner.get_player_name()
 
 
 class Player:
@@ -326,21 +323,6 @@ class Piece:
         self._piece_color = piece_color
         self._piece_type = piece_type
 
-    def check_moves(self, starting_square_location, destination_square_location):
-        """Checks if move available for piece type."""
-        # TODO Not finished with checking moves.
-        # King piece moves
-        if self._piece_type == "king":
-            pass
-
-        # Triple king piece moves
-        elif self._piece_type == "triple_king":
-            pass
-
-        # Regular piece moves
-        else:
-            pass
-
     def get_piece_color(self):
         """Returns piece's color."""
         return self._piece_color
@@ -409,6 +391,7 @@ for row in game._board.get_board():
 
 game.play_game("Lucy", (4, 3), (3, 2))
 
+game.print_board()
 
 # game.play_game("Adam", (2, 7), (3, 6))
 
