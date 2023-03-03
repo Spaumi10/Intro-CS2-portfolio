@@ -202,7 +202,7 @@ class Checkers:
         Returns the name of the winning player, or if game not over, returns
         that fact.
         """
-        for player in self._players():
+        for player in self._players:
             if player.get_captured_pieces_count() == 12:
                 defeated_player = player
             else:
