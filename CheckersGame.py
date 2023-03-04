@@ -100,8 +100,8 @@ class Checkers:
 
     def get_checker_details(self, square_location):
         """Returns the checker details present at the square_location."""
-        row = square_location[0]
-        column = square_location[1]
+        row, column = square_location[0], square_location[1]
+
         try:
             if self._board.get_board()[row][column]:
                 return self._board.get_board()[row][column]
@@ -336,8 +336,8 @@ class Piece:
         """Sets piece to piece_type."""
         self._piece_type = new_piece_type
 
-    def __str__(self) -> str:
-        return self._piece_type
+    # def __str__(self) -> str:
+    #     return self._piece_type
 
     def __repr__(self) -> str:
         return self._piece_type
@@ -355,7 +355,7 @@ class InvalidSquare(Exception):
     """"""
 
     def __str__(self):
-        return "Your move would take you off the board or you picked a piece that is not yours."
+        return "If you tried to move, your move would take you off the board or you picked a piece that is not yours. If you were checking for a checker's details, you picked a space off the board."
 
     pass
 
@@ -385,6 +385,8 @@ game.play_game("Lucy", (5, 4), (4, 3))
 
 
 game.play_game("Adam", (2, 1), (3, 2))
+
+print(game.get_checker_details((4, 3)))
 
 
 # print("\n")
