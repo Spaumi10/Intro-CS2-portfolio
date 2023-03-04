@@ -55,11 +55,18 @@ class Checkers:
         # Checks if player can move. They can't if they were the last player to
         # go and made a move (no jump). They can if they jumped and are moving
         # that same piece again.
+        # if (
+        #     current_player.get_piece_color() == self._turn
+        #     or self._previous_destination != starting_square_location
+        #     and self._previous_destination is not None
+        #     and self._previous_player is current_player
+        # ):
+        #     raise OutofTurn
+
         if (
             current_player.get_piece_color() == self._turn
-            or self._previous_destination != starting_square_location
-            and self._previous_destination is not None
-            and self._previous_player is current_player
+            or current_player == self._previous_player
+            and self._previous_destination != starting_square_location
         ):
             raise OutofTurn
 
@@ -398,7 +405,7 @@ Player2 = game.create_player("Lucy", "Black")
 game.play_game("Lucy", (5, 4), (4, 3))
 
 game.play_game("Adam", (2, 1), (3, 2))
-# game.play_game("Adam", (3, 2), (2, 1))
+# game.play_game("Adam", (2, 7), (3, 6))
 
 print("\n")
 for row in game._board.get_board():
@@ -411,10 +418,13 @@ for row in game._board.get_board():
     print(row)
 
 game.play_game("Lucy", (2, 1), (3, 2))
+# game.play_game("Lucy", (3, 2), (4, 3))
 
 
 game.play_game("Adam", (2, 7), (3, 6))
+# game.play_game("Adam", (3, 6), (2, 7))
 
+game.play_game("Lucy", (5, 0), (4, 1))
 # # print(game.get_checker_details((4, 3)))
 
 
