@@ -12,13 +12,16 @@ class Checkers:
     Attributes:
     - board is a Board object for game with starting pieces in place
     - players is a list of player objects
-    - players_turn keeps track of who's turn it is.
+    - turn refers to who cannot move on the current move.
     """
 
     def __init__(self):
         self._board = Board()
         self._players = []
-        self._players_turn = "Black"
+        self._turn = "White"
+        self._previous_destination = None
+        self._previous_player = None
+        # self._players_turn = "Black"
 
     def create_player(self, player_name, piece_color):
         """Returns a player object with name and piece color."""
@@ -34,11 +37,13 @@ class Checkers:
         location.
         """
         # TODO look into refactoring some of this code below into other methods.
+
         # Gets current and non-current player object and collects current player name to check below.
+        # TODO You should get the current_player_names another way that only requires it once per game.
         current_player_names = []
         for player_obj in self._players:
             current_player_names.append(player_obj.get_player_name())
-            if player_obj.get_piece_color() == self._players_turn:
+            if player_obj.get_player_name() == player_name:
                 current_player = player_obj
             else:
                 other_player = player_obj
@@ -47,54 +52,60 @@ class Checkers:
         if player_name not in current_player_names:
             raise InvalidPlayer
 
-        # Checks if correct player made move
-        if player_name != current_player.get_player_name():
+        # Checks if player can move. They can't if they were the last player to
+        # go and made a move (no jump). They can if they jumped and are moving
+        # that same piece again.
+        if (
+            current_player.get_piece_color() == self._turn
+            or self._previous_destination != starting_square_location
+            and self._previous_destination is not None
+            and self._previous_player is current_player
+        ):
             raise OutofTurn
+
         else:
             starting_row = starting_square_location[0]
             starting_column = starting_square_location[1]
             ending_row = destination_square_location[0]
             ending_column = destination_square_location[1]
 
-            # Checks if ending square is already occupied.
-            # if self._board.get_board()[ending_row][ending_column]:
-            #     raise InvalidDestination
-
             # Get piece object that needs moved.
             piece_to_move = self._board.get_board()[starting_row][starting_column]
 
             # Checks if current player moved other player's piece.
-            if piece_to_move.get_piece_color() != self._players_turn:
+            if piece_to_move.get_piece_color() == other_player.get_piece_color():
                 raise InvalidSquare
 
             # Move piece
             self._board.get_board()[ending_row][ending_column] = piece_to_move
 
-            # Checking if move took piece, removing piece, and adding to captured pieces.
-            self.capture_pieces(
-                starting_row, ending_row, starting_column, ending_column, other_player
-            )
+            self._previous_destination = destination_square_location
+
+            # Checks if move is one that doesn't capture.
+            if starting_row + 1 == ending_row or starting_row - 1 == ending_row:
+                if self._turn == "Black":
+                    self._turn = "White"
+                else:
+                    self._turn = "Black"
+            else:
+
+                # Checking if move took piece, removing piece, and adding to captured pieces.
+                self.capture_pieces(
+                    starting_row,
+                    ending_row,
+                    starting_column,
+                    ending_column,
+                    other_player,
+                )
+                self._turn = None
 
             # Revert starting_square to None.
             self._board.get_board()[starting_row][starting_column] = None
 
-            # This is how I am handling do they have an extra jump.
-            # additional_move_response = input(
-            #     "Do you have an another jump? (y/n): "
-            # ).lower()
-            # if additional_move_response != "y":
-            #     additional_move = False
-
             # Checks if piece should be kinged or triple kinged.
             self.king_check(current_player, piece_to_move, ending_row)
 
-        # TODO Account for additional jumps by current_player, before switching to next player.
-
-        # Moves turn to next player.
-        if self._players_turn == "Black":
-            self._players_turn = "White"
-        else:
-            self._players_turn = "Black"
+            self._previous_player = current_player
 
         return other_player.get_captured_pieces_count()
 
@@ -386,50 +397,27 @@ Player2 = game.create_player("Lucy", "Black")
 
 game.play_game("Lucy", (5, 4), (4, 3))
 
-
 game.play_game("Adam", (2, 1), (3, 2))
+# game.play_game("Adam", (3, 2), (2, 1))
 
-print(game.get_checker_details((4, 3)))
+print("\n")
+for row in game._board.get_board():
+    print(row)
 
+game.play_game("Lucy", (4, 3), (2, 1))
 
-# print("\n")
-# for row in game._board.get_board():
-#     print(row)
+print("\n")
+for row in game._board.get_board():
+    print(row)
 
-# game.play_game("Lucy", (4, 3), (3, 2))
-
-
-# game.play_game("Adam", (2, 7), (3, 6))
-
-
-# game.play_game("Lucy", (5, 6), (4, 5))
+game.play_game("Lucy", (2, 1), (3, 2))
 
 
-# game.play_game("Adam", (3, 6), (5, 4))
+game.play_game("Adam", (2, 7), (3, 6))
+
+# # print(game.get_checker_details((4, 3)))
 
 
-# game.play_game("Lucy", (6, 5), (4, 3))
-
-
-# game.play_game("Adam", (2, 3), (3, 4))
-
-
-# game.play_game("Lucy", (5, 0), (4, 1))
-
-
-# game.play_game("Adam", (1, 2), (2, 3))
-
-# game.play_game("Lucy", (2, 1), (0, 0))
-
-# game.play_game("Adam", (3, 4), (7, 1))
-
-# game.play_game("Lucy", (0, 0), (7, 7))
-
-# game.play_game("Adam", (7, 1), (0, 0))
-# print("\n")
-# for row in game._board.get_board():
-#     print(row)
-
-# print(game.get_checker_details((0, 1)))
-
-# print(Player1.get_captured_pieces_count())
+print("\n")
+for row in game._board.get_board():
+    print(row)
