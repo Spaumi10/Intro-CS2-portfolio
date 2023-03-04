@@ -345,14 +345,17 @@ class Piece:
 
 # Exceptions
 class OutofTurn(Exception):
-    """"""
+    """Returns a message if player attempts to go out of turn."""
 
     def __str__(self):
         return "It is not your turn."
 
 
 class InvalidSquare(Exception):
-    """"""
+    """
+    Returns a message if player tries to move off board or picks a piece that isn't theirs.
+    Also, if player checks a pieces details but the requested spot is off board.
+    """
 
     def __str__(self):
         return "If you tried to move, your move would take you off the board or you picked a piece that is not yours. If you were checking for a checker's details, you picked a space off the board."
@@ -361,7 +364,7 @@ class InvalidSquare(Exception):
 
 
 class InvalidPlayer(Exception):
-    """"""
+    """Returns a message if player name is not one of the active players."""
 
     def __str__(self):
         return "That name is not a current player of this game."
