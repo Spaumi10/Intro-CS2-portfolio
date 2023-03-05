@@ -1,6 +1,6 @@
 # Author: Michael Spaulding
 # GitHub username: Spaumi10
-# Date: 03/01/2023
+# Date: 03/05/2023
 # Description: Program that replicates a checkers game with multiple classes and
 # methods.
 
@@ -28,6 +28,10 @@ class Checkers:
         created_player = Player(player_name, piece_color)
         self._players.append(created_player)
         return created_player
+
+    def get_players(self):
+        """Returns list of player objects."""
+        return self._players
 
     def play_game(
         self, player_name, starting_square_location, destination_square_location
