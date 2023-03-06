@@ -21,7 +21,6 @@ class Checkers:
         self._turn = "White"
         self._previous_destination = None
         self._previous_player = None
-        # self._players_turn = "Black"
 
     def create_player(self, player_name, piece_color):
         """Returns a player object with name and piece color."""
@@ -59,14 +58,6 @@ class Checkers:
         # Checks if player can move. They can't if they were the last player to
         # go and made a move (no jump). They can if they jumped and are moving
         # that same piece again.
-        # if (
-        #     current_player.get_piece_color() == self._turn
-        #     or self._previous_destination != starting_square_location
-        #     and self._previous_destination is not None
-        #     and self._previous_player is current_player
-        # ):
-        #     raise OutofTurn
-
         if (
             current_player.get_piece_color() == self._turn
             or current_player == self._previous_player
@@ -399,39 +390,21 @@ class InvalidDestination(Exception):
         return "Your destination is on top of a current piece. Not valid."
 
 
-game = Checkers()
+if __name__ == "__main__":
 
-Player1 = game.create_player("Adam", "White")
+    game = Checkers()
 
-Player2 = game.create_player("Lucy", "Black")
+    print(game._board.get_board())
 
+    player1 = game.create_player("Cleopatra", "Black")
+    player2 = game.create_player("Dido", "White")
+    game.play_game("Cleopatra", (5, 0), (4, 1))
+    game.play_game("Dido", (2, 1), (3, 2))
+    game.play_game("Cleopatra", (4, 1), (3, 0))
+    game.play_game("Dido", (1, 2), (2, 1))
+    game.play_game("Cleopatra", (3, 0), (1, 2))
+    # game.play_game("Cleopatra", (6, 1), (5, 0))
 
-game.play_game("Lucy", (5, 4), (4, 3))
-
-game.play_game("Adam", (2, 1), (3, 2))
-# game.play_game("Adam", (2, 7), (3, 6))
-
-print("\n")
-for row in game._board.get_board():
-    print(row)
-
-game.play_game("Lucy", (4, 3), (2, 1))
-
-print("\n")
-for row in game._board.get_board():
-    print(row)
-
-game.play_game("Lucy", (2, 1), (3, 2))
-# game.play_game("Lucy", (3, 2), (4, 3))
-
-
-game.play_game("Adam", (2, 7), (3, 6))
-# game.play_game("Adam", (3, 6), (2, 7))
-
-game.play_game("Lucy", (5, 0), (4, 1))
-# # print(game.get_checker_details((4, 3)))
-
-
-print("\n")
-for row in game._board.get_board():
-    print(row)
+    print("\n")
+    for row in game._board.get_board():
+        print(row)
