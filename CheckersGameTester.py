@@ -1,3 +1,8 @@
+# Author: Michael Spaulding
+# GitHub username: Spaumi10
+# Date: 03/06/2023
+# Description: Unittests for CheckersGame.
+
 import unittest
 
 import CheckersGame

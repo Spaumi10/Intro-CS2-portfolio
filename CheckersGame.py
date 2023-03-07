@@ -1,6 +1,6 @@
 # Author: Michael Spaulding
 # GitHub username: Spaumi10
-# Date: 03/05/2023
+# Date: 03/06/2023
 # Description: Program that replicates a checkers game with multiple classes and
 # methods.
 
@@ -12,13 +12,13 @@ class Checkers:
     Attributes:
     - board is a Board object for game with starting pieces in place
     - players is a list of player objects
-    - turn refers to who cannot move on the current move.
+    - not_turn refers to who cannot move on the current move.
     """
 
     def __init__(self):
         self._board = Board()
         self._players = []
-        self._turn = "White"
+        self._not_turn = "White"
         self._previous_destination = None
         self._previous_player = None
 
@@ -59,7 +59,7 @@ class Checkers:
         # go and made a move (no jump). They can if they jumped and are moving
         # that same piece again.
         if (
-            current_player.get_piece_color() == self._turn
+            current_player.get_piece_color() == self._not_turn
             or current_player == self._previous_player
             and self._previous_destination != starting_square_location
         ):
@@ -85,10 +85,10 @@ class Checkers:
 
             # Checks if move is one that doesn't capture.
             if starting_row + 1 == ending_row or starting_row - 1 == ending_row:
-                if self._turn == "Black":
-                    self._turn = "White"
+                if self._not_turn == "Black":
+                    self._not_turn = "White"
                 else:
-                    self._turn = "Black"
+                    self._not_turn = "Black"
             else:
 
                 # Checking if move took piece, removing piece, and adding to captured pieces.
@@ -99,7 +99,7 @@ class Checkers:
                     ending_column,
                     other_player,
                 )
-                self._turn = None
+                self._not_turn = None
 
             # Revert starting_square to None.
             self._board.get_board()[starting_row][starting_column] = None
@@ -381,13 +381,6 @@ class InvalidPlayer(Exception):
 
     def __str__(self):
         return "That name is not a current player of this game."
-
-
-class InvalidDestination(Exception):
-    """"""
-
-    def __str__(self):
-        return "Your destination is on top of a current piece. Not valid."
 
 
 if __name__ == "__main__":
