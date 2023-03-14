@@ -45,7 +45,6 @@ class Checkers:
         # TODO look into refactoring some of this code below into other methods.
 
         # Gets current and non-current player object and collects current player name to check below.
-        # TODO You should get the current_player_names another way that only requires it once per game.
         current_player_names = []
         for player_obj in self._players:
             current_player_names.append(player_obj.get_player_name())
@@ -297,7 +296,6 @@ class Board:
 
     def __init__(self):
         self._board = []
-        # TODO Shorten code for creating a board w/ pieces.
         # Creates board and places starting pieces.
         for i in range(8):
             temp_list = []
