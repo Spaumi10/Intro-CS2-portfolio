@@ -100,7 +100,7 @@ class Checkers:
                     ending_row,
                     starting_column,
                     ending_column,
-                    other_player,
+                    current_player,
                 )
                 self._not_turn = None
 
@@ -152,7 +152,7 @@ class Checkers:
             player_obj.add_triple_king()
 
     def capture_pieces(
-        self, starting_row, ending_row, starting_column, ending_column, other_player
+        self, starting_row, ending_row, starting_column, ending_column, current_player
     ):
         """Calculates number of pieces captured and returns quantity of pieces."""
 
@@ -198,7 +198,7 @@ class Checkers:
 
                 self._board.get_board()[coordinate[0]][coordinate[1]] = None
                 captured_pieces += 1
-                other_player.add_captured_piece(1)
+                current_player.add_captured_piece(1)
                 # A triple king can take 2 pieces at most. This stops the search
                 # for additional squares that may have been jumped, but there
                 # can't be additional opponent pieces (this assumes the player
@@ -342,7 +342,7 @@ class Board:
 
 
 class Piece:
-    """Represents a checkers piece"""
+    """Represents a checkers piece."""
 
     def __init__(self, piece_color, piece_type):
         self._piece_color = piece_color
@@ -409,12 +409,6 @@ if __name__ == "__main__":
         print(row)
     game.play_game("Cleopatra", (4, 1), (3, 0))
     game.play_game("Dido", (1, 2), (2, 1))
-    print("\n")
-    for row in game._board.get_board():
-        print(row)
-    game.play_game("Cleopatra", (3, 0), (1, 2))
-    # game.play_game("Cleopatra", (6, 1), (5, 0))
-
     print("\n")
     for row in game._board.get_board():
         print(row)
