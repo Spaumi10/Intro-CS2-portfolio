@@ -218,17 +218,23 @@ class Checkers:
         Returns the name of the winning player, or if game not over, returns
         that fact.
         """
-        defeated_player = None
+        # defeated_player = None
+        # for player in self._players:
+        #     if player.get_captured_pieces_count() == 12:
+        #         defeated_player = player
+        #     else:
+        #         potential_winner = player
+
+        # if not defeated_player:
+        #     return "Game has not ended"
+        # else:
+        #     return potential_winner.get_player_name()
+
         for player in self._players:
             if player.get_captured_pieces_count() == 12:
-                defeated_player = player
-            else:
-                potential_winner = player
+                return player.get_player_name()
 
-        if not defeated_player:
-            return "Game has not ended"
-        else:
-            return potential_winner.get_player_name()
+        return "Game has not ended"
 
 
 class Player:
