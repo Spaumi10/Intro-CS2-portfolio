@@ -1,6 +1,6 @@
 # Author: Michael Spaulding
 # GitHub username: Spaumi10
-# Date: 03/06/2023
+# Date: 03/13/2023
 # Description: Program that replicates a checkers game with multiple classes and
 # methods.
 
@@ -13,6 +13,9 @@ class Checkers:
     - board is a Board object for game with starting pieces in place
     - players is a list of player objects
     - not_turn refers to who cannot move on the current move.
+    - previous_destination is used to track when a player just jumped someone
+    and thus will get another move.
+    - previous_player is used for a similar purpose as previous_destination
     """
 
     def __init__(self):
@@ -152,6 +155,7 @@ class Checkers:
         self, starting_row, ending_row, starting_column, ending_column, other_player
     ):
         """Calculates number of pieces captured and returns quantity of pieces."""
+
         # For moves going up and right.
         if starting_row > ending_row and starting_column < ending_column:
             row_coordinates = [num for num in range(ending_row + 1, starting_row)]
@@ -231,6 +235,13 @@ class Checkers:
 class Player:
     """
     Represents a checkers player.
+
+    Attributes:
+    - player_name is for storing the name of the player.
+    - piece_color is for storing the color of this player's pieces
+    - king_count is for storing quantity of kings the player currrently has.
+    - triple_king_count is for storing quantity of triple kings the player currrently has.
+    - capture_pieces_count is for storing the number of pieces the player has captured.
     """
 
     def __init__(self, player_name, piece_color):
@@ -387,17 +398,26 @@ if __name__ == "__main__":
 
     game = Checkers()
 
-    print(game._board.get_board())
+    # print(game._board.get_board())
 
     player1 = game.create_player("Cleopatra", "Black")
     player2 = game.create_player("Dido", "White")
     game.play_game("Cleopatra", (5, 0), (4, 1))
     game.play_game("Dido", (2, 1), (3, 2))
+    print("\n")
+    for row in game._board.get_board():
+        print(row)
     game.play_game("Cleopatra", (4, 1), (3, 0))
     game.play_game("Dido", (1, 2), (2, 1))
+    print("\n")
+    for row in game._board.get_board():
+        print(row)
     game.play_game("Cleopatra", (3, 0), (1, 2))
     # game.play_game("Cleopatra", (6, 1), (5, 0))
 
     print("\n")
     for row in game._board.get_board():
         print(row)
+
+print(player1.get_captured_pieces_count())
+print(player2.get_captured_pieces_count())
