@@ -396,26 +396,3 @@ class InvalidPlayer(Exception):
 
     def __str__(self):
         return "That name is not a current player of this game."
-
-
-if __name__ == "__main__":
-
-    game = Checkers()
-
-    # print(game._board.get_board())
-
-    player1 = game.create_player("Cleopatra", "Black")
-    player2 = game.create_player("Dido", "White")
-    game.play_game("Cleopatra", (5, 0), (4, 1))
-    game.play_game("Dido", (2, 1), (3, 2))
-    print("\n")
-    for row in game._board.get_board():
-        print(row)
-    game.play_game("Cleopatra", (4, 1), (3, 0))
-    game.play_game("Dido", (1, 2), (2, 1))
-    print("\n")
-    for row in game._board.get_board():
-        print(row)
-
-print(player1.get_captured_pieces_count())
-print(player2.get_captured_pieces_count())
