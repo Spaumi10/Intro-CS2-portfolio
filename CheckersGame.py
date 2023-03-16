@@ -1,6 +1,6 @@
 # Author: Michael Spaulding
 # GitHub username: Spaumi10
-# Date: 03/13/2023
+# Date: 03/15/2023
 # Description: Program that replicates a checkers game with multiple classes and
 # methods.
 
@@ -218,18 +218,6 @@ class Checkers:
         Returns the name of the winning player, or if game not over, returns
         that fact.
         """
-        # defeated_player = None
-        # for player in self._players:
-        #     if player.get_captured_pieces_count() == 12:
-        #         defeated_player = player
-        #     else:
-        #         potential_winner = player
-
-        # if not defeated_player:
-        #     return "Game has not ended"
-        # else:
-        #     return potential_winner.get_player_name()
-
         for player in self._players:
             if player.get_captured_pieces_count() == 12:
                 return player.get_player_name()
@@ -363,9 +351,6 @@ class Piece:
     def set_piece_type(self, new_piece_type):
         """Sets piece to piece_type."""
         self._piece_type = new_piece_type
-
-    # def __str__(self) -> str:
-    #     return self._piece_type
 
     def __repr__(self) -> str:
         return self._piece_type
