@@ -381,34 +381,34 @@ class InvalidPlayer(Exception):
         return "That name is not a current player of this game."
 
 
-game = Checkers()
+# game = Checkers()
 
-Player1 = game.create_player("Adam", "White")
-Player2 = game.create_player("Lucy", "Black")
+# Player1 = game.create_player("Adam", "White")
+# Player2 = game.create_player("Lucy", "Black")
 
-game.play_game("Lucy", (5, 6), (4, 7))
+# game.play_game("Lucy", (5, 6), (4, 7))
 
-game.play_game("Adam", (2, 1), (3, 0))
-game.play_game("Lucy", (5, 2), (4, 1))
-print("\n")
-for row in game._board.get_board():
-    print(row)
-game.play_game("Adam", (3, 0), (5, 2))
-game.play_game("Lucy", (6, 1), (4, 3))
-print("\n")
-for row in game._board.get_board():
-    print(row)
-game.play_game("Adam", (2, 3), (3, 4))
-game.play_game("Lucy", (7, 0), (6, 1))
-game.play_game("Adam", (3, 4), (5, 2))
-game.play_game("Adam", (5, 2), (7, 0))
+# game.play_game("Adam", (2, 1), (3, 0))
+# game.play_game("Lucy", (5, 2), (4, 1))
+# print("\n")
+# for row in game._board.get_board():
+#     print(row)
+# game.play_game("Adam", (3, 0), (5, 2))
+# game.play_game("Lucy", (6, 1), (4, 3))
+# print("\n")
+# for row in game._board.get_board():
+#     print(row)
+# game.play_game("Adam", (2, 3), (3, 4))
+# game.play_game("Lucy", (7, 0), (6, 1))
+# game.play_game("Adam", (3, 4), (5, 2))
+# game.play_game("Adam", (5, 2), (7, 0))
 
 
-print("\n")
-for row in game._board.get_board():
-    print(row)
+# print("\n")
+# for row in game._board.get_board():
+#     print(row)
 
-game.get_checker_details((3, 1))
+# game.get_checker_details((3, 1))
 
-print(Player1.get_captured_pieces_count())
-print(Player2.get_captured_pieces_count())
+# print(Player1.get_captured_pieces_count())
+# print(Player2.get_captured_pieces_count())
