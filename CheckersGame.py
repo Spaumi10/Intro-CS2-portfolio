@@ -42,8 +42,6 @@ class Checkers:
         Moves the player's piece from the starting location to the destination
         location.
         """
-        # TODO look into refactoring some of this code below into other methods.
-
         # Gets current and non-current player object and collects current player name to check below.
         current_player_names = []
         for player_obj in self._players:
@@ -97,7 +95,7 @@ class Checkers:
                     ending_row,
                     starting_column,
                     ending_column,
-                    other_player,
+                    current_player,
                 )
                 self._not_turn = None
 
@@ -109,7 +107,7 @@ class Checkers:
 
             self._previous_player = current_player
 
-        return other_player.get_captured_pieces_count()
+        return current_player.get_captured_pieces_count()
 
     def get_checker_details(self, square_location):
         """Returns the checker details present at the square_location."""
@@ -149,7 +147,7 @@ class Checkers:
             player_obj.add_triple_king()
 
     def capture_pieces(
-        self, starting_row, ending_row, starting_column, ending_column, other_player
+        self, starting_row, ending_row, starting_column, ending_column, current_player
     ):
         """Calculates number of pieces captured and returns quantity of pieces."""
 
@@ -195,7 +193,7 @@ class Checkers:
 
                 self._board.get_board()[coordinate[0]][coordinate[1]] = None
                 captured_pieces += 1
-                other_player.add_captured_piece(1)
+                current_player.add_captured_piece(1)
                 # A triple king can take 2 pieces at most. This stops the search
                 # for additional squares that may have been jumped, but there
                 # can't be additional opponent pieces (this assumes the player
@@ -279,7 +277,7 @@ class Player:
         self._captured_pieces_count += quantity
 
     def get_captured_pieces_count(self):
-        """Returns the number of opponent peces that the player has captured."""
+        """Returns the number of opponent pieces that the player has captured."""
         return self._captured_pieces_count
 
 
@@ -389,11 +387,11 @@ class InvalidPlayer(Exception):
 # game.play_game("Lucy", (5, 6), (4, 7))
 
 # game.play_game("Adam", (2, 1), (3, 0))
-# game.play_game("Lucy", (5, 2), (4, 1))
+# print(game.play_game("Lucy", (5, 2), (4, 1)))
 # print("\n")
 # for row in game._board.get_board():
 #     print(row)
-# game.play_game("Adam", (3, 0), (5, 2))
+# print(game.play_game("Adam", (3, 0), (5, 2)))
 # game.play_game("Lucy", (6, 1), (4, 3))
 # print("\n")
 # for row in game._board.get_board():
