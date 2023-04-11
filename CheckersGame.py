@@ -96,6 +96,7 @@ class Checkers:
                     starting_column,
                     ending_column,
                     current_player,
+                    other_player,
                 )
                 self._not_turn = None
 
@@ -115,7 +116,7 @@ class Checkers:
 
         try:
             if self._board.get_board()[row][column]:
-                return self._board.get_board()[row][column]
+                return self._board.get_board()[row][column]._piece_type
             else:
                 return None
         except IndexError:
@@ -147,7 +148,13 @@ class Checkers:
             player_obj.add_triple_king()
 
     def capture_pieces(
-        self, starting_row, ending_row, starting_column, ending_column, current_player
+        self,
+        starting_row,
+        ending_row,
+        starting_column,
+        ending_column,
+        current_player,
+        other_player,
     ):
         """Calculates number of pieces captured and returns quantity of pieces."""
 
@@ -187,9 +194,9 @@ class Checkers:
             current_square = self._board.get_board()[coordinate[0]][coordinate[1]]
             if current_square:
                 if "triple" in current_square.get_piece_type():
-                    current_square.remove_triple_king()
+                    other_player.remove_triple_king()
                 elif "king" in current_square.get_piece_type():
-                    current_square.remove_king()
+                    other_player.remove_king()
 
                 self._board.get_board()[coordinate[0]][coordinate[1]] = None
                 captured_pieces += 1
@@ -375,3 +382,8 @@ class InvalidPlayer(Exception):
 
     def __str__(self):
         return "That name is not a current player of this game."
+
+
+game = Checkers()
+for row in game._board.get_board():
+    print(row)
